@@ -23,7 +23,9 @@
         <activity
             android:name=".activities.UsersListActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.Splash"></activity>
+        <activity android:name=".activities.Splash" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.Selection"></activity>
     </application>
 
 </manifest>
