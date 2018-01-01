@@ -62,9 +62,10 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerViewUsers.setAdapter(usersRecyclerAdapter);
         databaseHelper = new DatabaseHelper(activity);
 
+
+        //FOR HELLO, EMAIL YATA TO
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
         textViewName.setText(emailFromIntent);
-
         getDataFromSQLite();
     }
 
