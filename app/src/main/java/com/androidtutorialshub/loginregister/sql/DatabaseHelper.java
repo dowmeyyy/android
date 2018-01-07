@@ -18,17 +18,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "UserManager.db"; // Database Name
 
-    // Database Name
-    private static final String DATABASE_NAME = "PROF.db";
-
-    // User table name
-    private static final String TABLE_USER = "user";
+    private static final String TABLE_USER = "user"; // User table name
     private static final String COLUMN_USER_ID = "user_id";   // User Table Columns names
     private static final String COLUMN_USER_NAME = "user_name";
     private static final String COLUMN_USER_UNAME = "user_uname";
     private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "user_password";
+
+    private static final String TABLE_STUD = "stud";
+    private static final String COLUMN_STUD_ID = "stud_id";
+    private static final String COLUMN_STUD_NAME = "stud_name";
+    private static final String COLUMN_STUD_UNAME = "stud_uname";
+    private static final String COLUMN_STUD_EMAIL = "stud_email";
+    private static final String COLUMN_STUD_PASSWORD = "stud_password";
+
+    private static final String TABLE_CLASS = "class";
+    private static final String COLUMN_CLASS_ID = "class_id";
+    private static final String COLUMN_CLASS_TITLE = "class_tile";
+    private static final String COLUMN_CLASS_DESCRI = "class_descri";
+    private static final String COLUMN_CLASS_DAY = "class_day";
+    private static final String COLUMN_CLASS_TIMEIN = "class_timein";
+    private static final String COLUMN_CLASS_TIMEOUT = "class_timeout";
+    private static final String COLUMN_CLASS_PID = "class_pid";
 
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
@@ -38,8 +51,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_USER_EMAIL + " TEXT,"
             + COLUMN_USER_PASSWORD + " TEXT" + ")";
 
+    private String CREATE_CLASS_TABLE = "CREATE TABLE " + TABLE_CLASS + "("
+            + COLUMN_CLASS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_CLASS_TITLE + " TEXT,"
+            + COLUMN_CLASS_DESCRI + " TEXT,"
+            + COLUMN_CLASS_DAY + " TEXT,"
+            + COLUMN_CLASS_TIMEIN + " TEXT,"
+            + COLUMN_CLASS_TIMEOUT + " TEXT, "
+            + COLUMN_CLASS_PID + "INTEGER, "
+            + "FOREIGN KEY(" + COLUMN_CLASS_PID + ") REFERENCES "
+            + TABLE_USER + "(id)" + ")";
+
+    private String CREATE_STUD_TABLE = "CREATE TABLE" + TABLE_STUD + "("
+            + COLUMN_STUD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_STUD_NAME + "TEXT, "
+            + COLUMN_STUD_UNAME + "TEXT, "
+            + COLUMN_STUD_EMAIL + "TEXT, "
+            +COLUMN_STUD_PASSWORD + "TEXT" + ")";
+
+
+    private static DatabaseHelper instance; //ADDITION TONIGHT 6/1/18
+
+    public static synchronized DatabaseHelper getHelper(Context context) {
+        if (instance == null)
+            instance = new DatabaseHelper(context);
+        return instance;
+    }
+
     // drop table sql query
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
+    private String DROP_STUD_TABLE = "DROP TABLE IF EXISTS " + TABLE_STUD;
 
     /**
      * Constructor
@@ -51,8 +92,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys= 0;");
+        }
+    }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_STUD_TABLE);
+        db.execSQL(CREATE_CLASS_TABLE);
     }
 
 
